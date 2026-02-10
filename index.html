@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A Special Surprise... 💘</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Design Assets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --secondary-pink: #ff8fa3;
+            --light-pink: #ffccd5;
+            --dark-pink: #c9184a;
+            --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            background: var(--bg-gradient); 
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Floating hearts background */
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .heart {
+            position: absolute;
+            background-color: var(--primary-pink);
+            display: inline-block;
+            height: 20px;
+            width: 20px;
+            opacity: 0.3;
+        }
+        
+        .heart:before,
+        .heart:after {
+            content: "";
+            background-color: var(--primary-pink);
+            border-radius: 50%;
+            height: 20px;
+            width: 20px;
+            position: absolute;
+        }
+        
+        .heart:before {
+            top: -10px;
+            left: 0;
+        }
+        
+        .heart:after {
+            left: 10px;
+            top: 0;
+        }
+
+        h1 { 
+            font-family: 'Dancing Script', cursive; 
+            font-size: 5rem; 
+            color: var(--dark-pink);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+        
+        h2 { 
+            font-family: 'Dancing Script', cursive; 
+            font-size: 3.5rem; 
+            color: var(--dark-pink);
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            color: var(--dark-pink);
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 0;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modern Photo Grid */
+        .photo-gallery {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .photo-gallery::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .img-card {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 12px solid white;
+            box-shadow: var(--shadow);
+            transition: all 0.5s ease;
+            height: 350px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .img-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .img-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .img-card:hover::after {
+            opacity: 1;
+        }
+
+        .img-card img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .img-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: white;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .img-card:hover .photo-caption {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* DATE PLANNER QUIZ - Hidden initially */
+        .date-planner {
+            padding: 80px 0;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+            margin: 40px;
+            box-shadow: var(--shadow);
+            display: none; /* Hidden until YES is clicked */
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-box {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .question-box.active {
+            display: block;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid var(--light-pink);
+            border-radius: 15px;
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+
+        .option-btn:hover {
+            background: var(--light-pink);
+            transform: translateY(-5px);
+            border-color: var(--primary-pink);
+        }
+
+        .option-btn.selected {
+            background: var(--primary-pink);
+            color: white;
+            border-color: var(--primary-pink);
+            transform: scale(1.05);
+        }
+
+        .option-icon {
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-pink), var(--secondary-pink));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .prev-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .prev-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .next-btn {
+            background: var(--primary-pink);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        .next-btn:hover:not(:disabled) {
+            background: var(--dark-pink);
+            transform: translateY(-3px);
+        }
+
+        .next-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* The Big Question Section */
+        .big-question-box {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 50px 20px;
+            background: rgba(255, 255, 255, 0.6);
+            position: relative;
+            border-radius: 40px;
+            margin: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .question-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .yes-btn { 
+            background: linear-gradient(45deg, var(--primary-pink), var(--dark-pink));
+            color: white; 
+            border-radius: 50px; 
+            padding: 20px 70px; 
+            font-size: 1.8rem;
+            font-weight: 600; 
+            border: none;
+            box-shadow: 0 15px 30px rgba(255, 77, 109, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .yes-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 77, 109, 0.6);
+        }
+
+        .yes-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .yes-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .yes-btn:hover::before {
+            left: 100%;
+        }
+
+        .no-btn { 
+            background: #6c757d; 
+            color: white; 
+            border-radius: 50px; 
+            padding: 15px 40px; 
+            border: none;
+            transition: 0.1s ease;
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-btn:hover {
+            background: #5a6268;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+            min-height: 150px;
+            position: relative;
+        }
+
+        /* HIDDEN SUCCESS SCREEN */
+        .success-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-pink), var(--dark-pink));
+            z-index: 1000;
+            animation: fadeIn 0.8s ease;
+            padding: 20px;
+        }
+
+        .success-content {
+            max-width: 800px;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: var(--shadow-hover);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .success-screen h1 {
+            font-size: 6rem;
+            color: var(--dark-pink);
+            margin-bottom: 2rem;
+        }
+
+        .success-screen p {
+            font-size: 2rem;
+            color: #333;
+            font-family: 'Dancing Script', cursive;
+            margin-bottom: 1.5rem;
+        }
+
+        .date-summary {
+            background: var(--light-pink);
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .date-summary h3 {
+            color: var(--dark-pink);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .date-summary p {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: #555;
+        }
+
+        .budget-disclaimer {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .budget-disclaimer h4 {
+            color: #856404;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .budget-disclaimer p {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        .money-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.8rem; }
+            h3 { font-size: 1.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .img-card { height: 250px; }
+            .yes-btn { padding: 18px 50px; font-size: 1.5rem; }
+            .no-btn { padding: 12px 30px; }
+            .big-question-box, .date-planner { margin: 20px; }
+            .button-container { gap: 20px; }
+            .success-screen h1 { font-size: 4rem; }
+            .success-screen p { font-size: 1.8rem; }
+            .option-btn { min-height: 100px; padding: 1rem; }
+            .options-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 576px) {
+            h1 { font-size: 2.8rem; }
+            h2 { font-size: 2.2rem; }
+            .img-card { height: 200px; }
+            .yes-btn { padding: 15px 40px; font-size: 1.3rem; }
+            .button-container { flex-direction: column; }
+            .quiz-nav { flex-direction: column; }
+            .nav-btn { width: 100%; }
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Row and column layout */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+
+        .col-md-4 {
+            width: 33.3333%;
+            padding: 0 15px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .col-md-4 {
+                width: 50%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .col-md-4 {
+                width: 100%;
+            }
+        }
+
+        /* Utility classes */
+        .text-center { text-align: center; }
+        .mb-4 { margin-bottom: 1.5rem; }
+        .mb-5 { margin-bottom: 3rem; }
+        .d-flex { display: flex; }
+        .d-none { display: none; }
+        .d-block { display: block; }
+        .justify-content-center { justify-content: center; }
+        .align-items-center { align-items: center; }
+        .gap-4 { gap: 1.5rem; }
+        .fs-4 { font-size: 1.5rem; }
+        .min-vh-100 { min-height: 100vh; }
+        .mt-4 { margin-top: 1.5rem; }
+        .mt-5 { margin-top: 3rem; }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="heart-bg" id="heartBg"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <h1>Will You Be My Valentine? 💘</h1>
+            <p class="subtitle">Say YES and let's plan the perfect date together...</p>
+        </div>
+    </div>
+
+    <!-- 1. PHOTOS FIRST -->
+    <section class="photo-gallery">
+        <div class="container">
+            <div class="section-title">
+                <h2>Thinking of us... ✨</h2>
+                <p>I was looking through our memories and couldn't help but smile. Each photo reminds me of a special moment we shared.</p>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="img-card">
+                        <img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Memory 1">
+                        <div class="photo-caption">Our first adventure together</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="img-card">
+                        <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Memory 2">
+                        <div class="photo-caption">That perfect sunset moment</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="img-card">
+                        <img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Memory 3">
+                        <div class="photo-caption">Laughing until our sides hurt</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE BIG QUESTION - This shows FIRST -->
+    <section class="big-question-box" id="ask-section">
+        <div class="container">
+            <div class="question-content">
+                <h1 class="mb-4">Will You Be My Valentine? 💘</h1>
+                <p class="fs-4 mb-5">If you say YES, I'll ask you a few questions to plan our perfect date!</p>
+                
+                <div class="button-container">
+                    <button class="yes-btn" id="mainYesBtn" onclick="showQuiz()">YES! 💖</button>
+                    <button class="no-btn" id="noBtn" onmouseover="dodge()">No 😢</button>
+                </div>
+                
+                <p class="mt-5" style="color: #888; font-style: italic;">(P.S. You might have to catch the "No" button... it's a bit shy!)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. DATE PLANNER QUIZ - Hidden until YES is clicked -->
+    <section class="date-planner" id="quizSection">
+        <div class="container">
+            <div class="section-title">
+                <h2>Let's Plan Our Perfect Date Together! ✨</h2>
+                <p>Now that you're my Valentine, help me plan the perfect date by answering these questions...</p>
+            </div>
+            
+            <div class="quiz-container">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Question 1 of 10</div>
+                </div>
+                
+                <div id="quizQuestions"></div>
+                
+                <div class="quiz-nav">
+                    <button class="nav-btn prev-btn" id="prevBtn" onclick="prevQuestion()">← Previous</button>
+                    <button class="nav-btn next-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. HIDDEN SUCCESS SCREEN -->
+    <section class="success-screen" id="success">
+        <div class="success-content">
+            <h1 class="display-1">YAY! 🎉</h1>
+            <p class="fs-2">You're My Valentine! ❤️</p>
+            
+            <div class="date-summary" id="dateSummary">
+                <h3>Our Perfect Date Plan ✨</h3>
+                <!-- Date summary will be generated here -->
+            </div>
+            
+            <!-- BUDGET DISCLAIMER -->
+            <div class="budget-disclaimer">
+                <span class="money-icon">💰</span>
+                <h4>Important Budget Notice! 🏦</h4>
+                <p>💸 <strong>Full Disclosure:</strong> Your Valentine is currently experiencing a "financial renaissance" (aka: broke).</p>
+                <p>🎯 <strong>But here's the deal:</strong> Our date will be 100% free/cheap but 1000% thoughtful!</p>
+                <p>✨ <strong>Think:</strong> Picnics > Fancy restaurants, Walks > Expensive tickets, Homemade meals > Michelin stars</p>
+                <p>❤️ <strong>Promise:</strong> I'll make it the most memorable date ever... just maybe not the most expensive! 😅</p>
+            </div>
+            
+            <button class="yes-btn mt-5" onclick="celebrate()" style="font-size: 1.5rem; padding: 15px 40px;">
+                I Don't Care About Money! Let's Celebrate! 🎉
+            </button>
+        </div>
+    </section>
+
+    <script>
+        // Quiz questions data
+        const quizQuestions = [
+            {
+                question: "1. What's your ideal date atmosphere? 💫",
+                options: [
+                    { text: "Romantic & Intimate", icon: "❤️", category: "atmosphere" },
+                    { text: "Fun & Adventurous", icon: "🎢", category: "atmosphere" },
+                    { text: "Relaxed & Casual", icon: "☕", category: "atmosphere" },
+                    { text: "Mysterious & Unexpected", icon: "🔮", category: "atmosphere" }
+                ]
+            },
+            {
+                question: "2. What type of food are you craving? 🍽️",
+                options: [
+                    { text: "Fancy Restaurant", icon: "🍷", category: "food" },
+                    { text: "Homemade Meal", icon: "🍝", category: "food" },
+                    { text: "Street Food/Quick Bites", icon: "🌮", category: "food" },
+                    { text: "Sweet Treats & Desserts", icon: "🍰", category: "food" }
+                ]
+            },
+            {
+                question: "3. What's your preferred date timing? ⏰",
+                options: [
+                    { text: "Sunset & Evening", icon: "🌇", category: "timing" },
+                    { text: "Daytime Adventure", icon: "☀️", category: "timing" },
+                    { text: "Late Night Stroll", icon: "🌙", category: "timing" },
+                    { text: "All Day Marathon", icon: "⏳", category: "timing" }
+                ]
+            },
+            {
+                question: "4. What's your activity vibe? 🎯",
+                options: [
+                    { text: "Creative & Artsy", icon: "🎨", category: "activity" },
+                    { text: "Active & Sporty", icon: "🚴", category: "activity" },
+                    { text: "Educational & Cultural", icon: "🎭", category: "activity" },
+                    { text: "Just Talking & Connecting", icon: "💬", category: "activity" }
+                ]
+            },
+            {
+                question: "5. What's your ideal date location? 📍",
+                options: [
+                    { text: "Cozy Indoor Spot", icon: "🏠", category: "location" },
+                    { text: "Outdoors in Nature", icon: "🌳", category: "location" },
+                    { text: "Urban/City Exploration", icon: "🏙️", category: "location" },
+                    { text: "Somewhere New & Unknown", icon: "🗺️", category: "location" }
+                ]
+            },
+            {
+                question: "6. What's your music preference? 🎵",
+                options: [
+                    { text: "Romantic Ballads", icon: "🎶", category: "music" },
+                    { text: "Upbeat & Fun", icon: "🎧", category: "music" },
+                    { text: "Jazz/Classical", icon: "🎻", category: "music" },
+                    { text: "Whatever's Playing!", icon: "🔀", category: "music" }
+                ]
+            },
+            {
+                question: "7. How do you feel about surprises? 🎁",
+                options: [
+                    { text: "Love them! Full surprise!", icon: "🎭", category: "surprise" },
+                    { text: "Partial surprise is good", icon: "🤫", category: "surprise" },
+                    { text: "Just tell me what we're doing", icon: "📋", category: "surprise" },
+                    { text: "Let's decide together", icon: "👥", category: "surprise" }
+                ]
+            },
+            {
+                question: "8. What's your dress code preference? 👗",
+                options: [
+                    { text: "Fancy & Dressed Up", icon: "👔", category: "dress" },
+                    { text: "Casual & Comfortable", icon: "👕", category: "dress" },
+                    { text: "Theme/Costume Fun", icon: "🎭", category: "dress" },
+                    { text: "Cozy & Relaxed", icon: "🛋️", category: "dress" }
+                ]
+            },
+            {
+                question: "9. How about transportation? 🚗",
+                options: [
+                    { text: "Romantic Drive", icon: "🚗", category: "transport" },
+                    { text: "Walking/Exploring", icon: "🚶", category: "transport" },
+                    { text: "Public Transit Adventure", icon: "🚌", category: "transport" },
+                    { text: "Stay In One Place", icon: "📍", category: "transport" }
+                ]
+            },
+            {
+                question: "10. Most important date element? ✨",
+                options: [
+                    { text: "Deep Conversation", icon: "💭", category: "priority" },
+                    { text: "Laughter & Fun", icon: "😂", category: "priority" },
+                    { text: "Romantic Connection", icon: "💘", category: "priority" },
+                    { text: "New Experiences", icon: "🌟", category: "priority" }
+                ]
+            }
+        ];
+
+        // User's selections
+        let userSelections = Array(quizQuestions.length).fill(null);
+        let currentQuestion = 0;
+        let warningModalAdded = false;
+
+        // Create floating hearts background
+        function createHearts() {
+            const heartBg = document.getElementById('heartBg');
+            const heartsCount = 30;
+            
+            for (let i = 0; i < heartsCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                const size = Math.random() * 20 + 10;
+                const posX = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 10 + 10;
+                
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                heart.style.left = `${posX}vw`;
+                heart.style.top = '-30px';
+                heart.style.animation = `float ${duration}s linear ${delay}s infinite`;
+                heart.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                heartBg.appendChild(heart);
+            }
+        }
+
+        // Show quiz when YES is clicked
+        function showQuiz() {
+            // Hide the big question section
+            document.getElementById('ask-section').style.display = 'none';
+            
+            // Show the quiz section
+            document.getElementById('quizSection').style.display = 'block';
+            
+            // Initialize the quiz
+            initQuiz();
+            
+            // Scroll to quiz section
+            document.getElementById('quizSection').scrollIntoView({ behavior: 'smooth' });
+            
+            // Trigger some confetti for celebration
+            celebrate();
+        }
+
+        // Initialize quiz
+        function initQuiz() {
+            const quizContainer = document.getElementById('quizQuestions');
+            quizContainer.innerHTML = ''; // Clear any existing content
+            
+            quizQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = `question-box ${index === 0 ? 'active' : ''}`;
+                questionDiv.id = `question-${index}`;
+                
+                questionDiv.innerHTML = `
+                    <h3>${q.question}</h3>
+                    <div class="options-grid">
+                        ${q.options.map((option, optIndex) => `
+                            <button class="option-btn" onclick="selectOption(${index}, ${optIndex})">
+                                <span class="option-icon">${option.icon}</span>
+                                <span>${option.text}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                
+                quizContainer.appendChild(questionDiv);
+            });
+            
+            updateProgress();
+        }
+
+        // Select an option
+        function selectOption(questionIndex, optionIndex) {
+            // Remove selected class from all options in this question
+            const questionDiv = document.getElementById(`question-${questionIndex}`);
+            questionDiv.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            const selectedBtn = questionDiv.querySelectorAll('.option-btn')[optionIndex];
+            selectedBtn.classList.add('selected');
+            
+            // Store selection
+            userSelections[questionIndex] = optionIndex;
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+            
+            // Auto-advance to next question after 0.5 seconds
+            setTimeout(() => {
+                if (questionIndex < quizQuestions.length - 1) {
+                    nextQuestion();
+                }
+            }, 500);
+            
+            // If this is the last question, enable final submission
+            if (questionIndex === quizQuestions.length - 1) {
+                document.getElementById('nextBtn').textContent = 'See Our Date Plan! →';
+                document.getElementById('nextBtn').setAttribute('onclick', 'showWarningBeforeFinal()');
+            }
+        }
+
+        // Navigate to next question
+        function nextQuestion() {
+            if (currentQuestion < quizQuestions.length - 1) {
+                document.getElementById(`question-${currentQuestion}`).classList.remove('active');
+                currentQuestion++;
+                document.getElementById(`question-${currentQuestion}`).classList.add('active');
+                document.getElementById('nextBtn').disabled = userSelections[currentQuestion] === null;
+                
+                // Update button text if we're on the last question
+                if (currentQuestion === quizQuestions.length - 1 && userSelections[currentQuestion] !== null) {
+                    document.getElementById('nextBtn').textContent = 'See Our Date Plan! →';
+                    document.getElementById('nextBtn').setAttribute('onclick', 'showWarningBeforeFinal()');
+                } else {
+                    document.getElementById('nextBtn').textContent = 'Next →';
+                    document.getElementById('nextBtn').setAttribute('onclick', 'nextQuestion()');
+                }
+                
+                updateProgress();
+            }
+        }
+
+        // Navigate to previous question
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                document.getElementById(`question-${currentQuestion}`).classList.remove('active');
+                currentQuestion--;
+                document.getElementById(`question-${currentQuestion}`).classList.add('active');
+                document.getElementById('nextBtn').disabled = userSelections[currentQuestion] === null;
+                
+                // Reset button text if not on last question
+                document.getElementById('nextBtn').textContent = 'Next →';
+                document.getElementById('nextBtn').setAttribute('onclick', 'nextQuestion()');
+                
+                updateProgress();
+            }
+        }
+
+        // SHOW WARNING BEFORE SHOWING DATE PLAN
+        function showWarningBeforeFinal() {
+            // Prevent multiple modals
+            if (warningModalAdded) return;
+            warningModalAdded = true;
+            
+            console.log("Showing warning modal...");
+            
+            // Create warning modal
+            const warningModal = document.createElement('div');
+            warningModal.id = 'warningModal';
+            warningModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                animation: fadeIn 0.3s ease;
+            `;
+            
+            warningModal.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #ffeb3b, #ff9800);
+                    border-radius: 20px;
+                    padding: 2.5rem;
+                    max-width: 500px;
+                    margin: 20px;
+                    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+                    text-align: center;
+                    border: 5px solid #ff5722;
+                    animation: pulseWarning 0.5s infinite alternate;
+                ">
+                    <h2 style="color: #d32f2f; font-size: 2.5rem; margin-bottom: 1rem; font-family: 'Poppins', sans-serif;">
+                        ⚠️ IMPORTANT WARNING! ⚠️
+                    </h2>
+                    
+                    <div style="background: white; padding: 1.5rem; border-radius: 15px; margin: 1.5rem 0; border: 3px dashed #ff5722;">
+                        <p style="font-size: 1.8rem; color: #d32f2f; margin-bottom: 1rem; font-weight: bold;">
+                            🚨 ATTENTION! 🚨
+                        </p>
+                        <p style="font-size: 1.3rem; color: #333; margin-bottom: 1rem; font-weight: bold;">
+                            This man has <span style="color: #d32f2f; font-size: 1.5em;">NO MONEY</span> 💸
+                        </p>
+                        <p style="font-size: 1.2rem; color: #555; margin-bottom: 1rem;">
+                            Your Valentine is currently experiencing a "financial adventure" (broke).
+                        </p>
+                        <p style="font-size: 1.2rem; color: #555; margin-bottom: 1rem;">
+                            The date plan you're about to see is brought to you by:
+                        </p>
+                        <p style="font-size: 1.4rem; color: #d32f2f; font-weight: bold; background: #ffebee; padding: 10px; border-radius: 10px;">
+                            💰 CREATIVITY & LOVE 💕
+                        </p>
+                        <p style="font-size: 1.2rem; color: #555; margin-top: 1rem;">
+                            (Not by actual money in the bank)
+                        </p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 20px; justify-content: center; margin-top: 2rem;">
+                        <button id="proceedButton" onclick="proceedToDatePlan()" style="
+                            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+                            color: white;
+                            border: none;
+                            padding: 15px 40px;
+                            border-radius: 50px;
+                            font-size: 1.3rem;
+                            font-weight: bold;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+                        ">
+                            I DON'T CARE! SHOW ME! 💖
+                        </button>
+                        <button onclick="goBackToQuiz()" style="
+                            background: #f44336;
+                            color: white;
+                            border: none;
+                            padding: 15px 30px;
+                            border-radius: 50px;
+                            font-size: 1.1rem;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                        ">
+                            Wait, I want a rich guy... 💔
+                        </button>
+                    </div>
+                    
+                    <p style="margin-top: 2rem; color: #666; font-size: 0.9rem; font-style: italic;">
+                        (Don't worry, I promise it'll be thoughtful and fun! Just... free.)
+                    </p>
+                </div>
+            `;
+            
+            // Add custom animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulseWarning {
+                    from { transform: scale(1); }
+                    to { transform: scale(1.02); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(warningModal);
+            
+            // Add emergency siren sound effect
+            playWarningSound();
+        }
+
+        function playWarningSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Create siren-like sound
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.type = 'sine';
+                gainNode.gain.value = 0.1;
+                
+                // Create siren effect
+                let time = audioContext.currentTime;
+                oscillator.frequency.setValueAtTime(800, time);
+                oscillator.frequency.exponentialRampToValueAtTime(1200, time + 0.5);
+                oscillator.frequency.exponentialRampToValueAtTime(800, time + 1);
+                
+                gainNode.gain.setValueAtTime(0.1, time);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, time + 1);
+                
+                oscillator.start(time);
+                oscillator.stop(time + 1);
+                
+                // Repeat for siren effect
+                setTimeout(() => {
+                    const oscillator2 = audioContext.createOscillator();
+                    const gainNode2 = audioContext.createGain();
+                    
+                    oscillator2.connect(gainNode2);
+                    gainNode2.connect(audioContext.destination);
+                    
+                    oscillator2.type = 'sine';
+                    gainNode2.gain.value = 0.1;
+                    
+                    let time2 = audioContext.currentTime;
+                    oscillator2.frequency.setValueAtTime(800, time2);
+                    oscillator2.frequency.exponentialRampToValueAtTime(1200, time2 + 0.5);
+                    oscillator2.frequency.exponentialRampToValueAtTime(800, time2 + 1);
+                    
+                    gainNode2.gain.setValueAtTime(0.1, time2);
+                    gainNode2.gain.exponentialRampToValueAtTime(0.01, time2 + 1);
+                    
+                    oscillator2.start(time2);
+                    oscillator2.stop(time2 + 1);
+                }, 1000);
+            } catch (e) {
+                console.log("Audio not supported");
+            }
+        }
+
+        function proceedToDatePlan() {
+            console.log("Proceed button clicked!");
+            
+            // Remove warning modal
+            const warningModal = document.getElementById('warningModal');
+            if (warningModal) {
+                warningModal.remove();
+            }
+            
+            // Reset flag
+            warningModalAdded = false;
+            
+            // Call the function to show the date plan
+            showFinalResult();
+        }
+
+        function goBackToQuiz() {
+            console.log("Go back button clicked!");
+            
+            // Remove warning modal
+            const warningModal = document.getElementById('warningModal');
+            if (warningModal) {
+                warningModal.remove();
+            }
+            
+            // Reset flag
+            warningModalAdded = false;
+            
+            // Play sad sound
+            playSadSound();
+            
+            // Show funny message
+            alert("Just kidding! Love can't be bought anyway! ❤️ Let's continue planning our perfect date!");
+        }
+
+        function playSadSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 392.00; // G4
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 1);
+                
+                setTimeout(() => {
+                    const oscillator2 = audioContext.createOscillator();
+                    const gainNode2 = audioContext.createGain();
+                    
+                    oscillator2.connect(gainNode2);
+                    gainNode2.connect(audioContext.destination);
+                    
+                    oscillator2.frequency.value = 349.23; // F4
+                    oscillator2.type = 'sine';
+                    
+                    gainNode2.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                    
+                    oscillator2.start(audioContext.currentTime);
+                    oscillator2.stop(audioContext.currentTime + 1);
+                }, 300);
+            } catch (e) {
+                console.log("Audio not supported");
+            }
+        }
+
+        // Show final result - FIXED VERSION
+        function showFinalResult() {
+            console.log("showFinalResult called - Showing date plan!");
+            
+            // Generate date summary FIRST
+            generateDateSummary();
+            
+            // Hide the quiz section
+            document.getElementById('quizSection').style.display = 'none';
+            
+            // Show success screen
+            document.getElementById('success').style.display = 'flex';
+            
+            // Force reflow to ensure display change takes effect
+            document.getElementById('success').offsetHeight;
+            
+            // Scroll to top of success screen
+            document.getElementById('success').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+            
+            // Trigger BIG celebration after a short delay
+            setTimeout(() => {
+                celebrateFinal();
+            }, 500);
+            
+            // Log for debugging
+            console.log("Date plan should be visible now!");
+        }
+
+        // Update progress bar and text
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / quizQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
+            
+            document.getElementById('prevBtn').style.visibility = currentQuestion > 0 ? 'visible' : 'hidden';
+        }
+
+        // Generate date summary from selections - FIXED VERSION
+        function generateDateSummary() {
+            console.log("Generating date summary...");
+            console.log("User selections:", userSelections);
+            
+            const summaryContainer = document.getElementById('dateSummary');
+            const selectedOptions = userSelections.map((selection, index) => {
+                if (selection !== null) {
+                    return quizQuestions[index].options[selection];
+                }
+                return null;
+            }).filter(option => option !== null);
+
+            console.log("Selected options:", selectedOptions);
+            
+            let summaryHTML = '';
+            
+            if (selectedOptions.length >= 10) {
+                summaryHTML = `
+                    <h3>Our Perfect Valentine's Date Plan ✨</h3>
+                    <div style="background: white; padding: 1.5rem; border-radius: 15px; margin-bottom: 1rem; border: 2px solid var(--light-pink);">
+                        <p>🎯 <strong>Atmosphere:</strong> ${selectedOptions[0].text}</p>
+                        <p>🍽️ <strong>Food Style:</strong> ${selectedOptions[1].text}</p>
+                        <p>⏰ <strong>Timing:</strong> ${selectedOptions[2].text}</p>
+                        <p>🎨 <strong>Activity Vibe:</strong> ${selectedOptions[3].text}</p>
+                        <p>📍 <strong>Location:</strong> ${selectedOptions[4].text}</p>
+                        <p>🎵 <strong>Music:</strong> ${selectedOptions[5].text}</p>
+                        <p>🎁 <strong>Surprise Level:</strong> ${selectedOptions[6].text}</p>
+                        <p>👗 <strong>Dress Code:</strong> ${selectedOptions[7].text}</p>
+                        <p>🚗 <strong>Transportation:</strong> ${selectedOptions[8].text}</p>
+                        <p>✨ <strong>Priority:</strong> ${selectedOptions[9].text}</p>
+                    </div>
+                    <p class="mt-4" style="text-align: center; font-style: italic; color: var(--dark-pink); font-size: 1.2rem;">
+                        Based on your answers, I'll plan the perfect Valentine's date just for us! 💖
+                    </p>
+                    <div style="background: #fff3cd; padding: 1rem; border-radius: 10px; margin-top: 1.5rem; border-left: 5px solid #ffc107;">
+                        <p style="color: #856404; margin: 0; font-style: italic; font-size: 1.1rem;">
+                            💡 <strong>Budget-Friendly Promise:</strong> I'll make each element magical without breaking the bank! My creativity is my currency! 😅
+                        </p>
+                    </div>
+                `;
+            } else {
+                summaryHTML = `
+                    <h3>Our Perfect Valentine's Date Plan ✨</h3>
+                    <div style="background: white; padding: 1.5rem; border-radius: 15px; margin-bottom: 1rem; border: 2px solid var(--light-pink);">
+                        <p>We'll figure out the perfect date together! ❤️</p>
+                        <p>Based on what you've told me, I promise to plan something special!</p>
+                    </div>
+                    <div style="background: #fff3cd; padding: 1rem; border-radius: 10px; margin-top: 1.5rem; border-left: 5px solid #ffc107;">
+                        <p style="color: #856404; margin: 0; font-style: italic; font-size: 1.1rem;">
+                            💡 <strong>Budget Update:</strong> Good news! Being broke means I have to be extra creative! 😄
+                        </p>
+                    </div>
+                `;
+            }
+            
+            summaryContainer.innerHTML = summaryHTML;
+            console.log("Date summary HTML generated!");
+        }
+
+        // Logic for the dodging NO button
+        function dodge() {
+            const btn = document.getElementById('noBtn');
+            const container = document.querySelector('.button-container');
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = btn.getBoundingClientRect();
+            
+            // Calculate random position within container bounds
+            const maxX = containerRect.width - btnRect.width - 20;
+            const maxY = containerRect.height - btnRect.height - 20;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            // Apply new position
+            btn.style.position = 'absolute';
+            btn.style.left = `${randomX}px`;
+            btn.style.top = `${randomY}px`;
+            btn.style.transition = 'all 0.3s ease';
+            
+            // Add some fun text
+            const messages = [
+                "Can't catch me! 😜",
+                "Too slow! 🏃‍♂️",
+                "Almost! Try again! 🎯",
+                "You know you want to say YES! 💖"
+            ];
+            
+            btn.textContent = messages[Math.floor(Math.random() * messages.length)];
+            
+            // Reset text after 1 second
+            setTimeout(() => {
+                btn.textContent = 'No 😢';
+            }, 1000);
+        }
+
+        // Celebration with confetti (for initial YES)
+        function celebrate() {
+            // Trigger confetti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            
+            // More confetti after delay
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                
+                confetti({
+                    particleCount: 100,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+            }, 250);
+        }
+
+        // BIG Celebration for final result
+        function celebrateFinal() {
+            console.log("Big celebration starting!");
+            
+            // Multiple confetti bursts
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 250,
+                        spread: 100,
+                        origin: { y: 0.6 }
+                    });
+                }, i * 300);
+            }
+            
+            // Heart-shaped confetti
+            setTimeout(() => {
+                const heartConfetti = (x, y) => {
+                    confetti({
+                        particleCount: 25,
+                        spread: 20,
+                        origin: { x, y },
+                        shapes: ['heart'],
+                        scalar: 2
+                    });
+                };
+                
+                heartConfetti(0.2, 0.8);
+                heartConfetti(0.5, 0.7);
+                heartConfetti(0.8, 0.8);
+                heartConfetti(0.3, 0.6);
+                heartConfetti(0.7, 0.6);
+            }, 800);
+            
+            // Play celebration sound
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Play a little melody
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                
+                notes.forEach((freq, index) => {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        oscillator.frequency.value = freq;
+                        oscillator.type = 'sine';
+                        
+                        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                        
+                        oscillator.start(audioContext.currentTime);
+                        oscillator.stop(audioContext.currentTime + 0.5);
+                    }, index * 200);
+                });
+            } catch (e) {
+                console.log("Audio not supported");
+            }
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Page loaded, initializing...");
+            
+            createHearts();
+            
+            // Set initial state
+            document.getElementById('quizSection').style.display = 'none';
+            document.getElementById('success').style.display = 'none';
+            
+            // Make sure quiz navigation works properly
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('nextBtn').setAttribute('onclick', 'nextQuestion()');
+            
+            // Add some initial confetti for effect
+            setTimeout(() => {
+                confetti({
+                    particleCount: 30,
+                    spread: 100,
+                    origin: { y: 0 }
+                });
+            }, 1000);
+            
+            // Debug: Test the function is available
+            window.testFunction = function() {
+                console.log("Test function called");
+                showFinalResult();
+            };
+        });
+    </script>
+</body>
+</html>
